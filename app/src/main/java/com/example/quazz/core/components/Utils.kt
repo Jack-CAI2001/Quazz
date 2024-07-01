@@ -1,4 +1,4 @@
-package com.example.quazz.components.core
+package com.example.quazz.core.components
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
