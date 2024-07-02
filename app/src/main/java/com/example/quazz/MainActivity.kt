@@ -59,6 +59,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.quazz.core.components.SubText
 import com.example.quazz.core.components.TextTitle
+import com.example.quazz.navigation.Nav
 import com.example.quazz.ui.theme.QuazzTheme
 import kotlinx.coroutines.launch
 
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             QuazzTheme {
-                Quiz(quizItems = quizItems)
+                Nav()
             }
         }
     }
