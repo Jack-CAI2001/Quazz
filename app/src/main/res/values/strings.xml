@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">Quazz</string>
+    <string name="authenticate">Authenticate</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_up_description">Don\'t have an account? Click here to Sign Up!</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_out_title">Sign out?</string>
+    <string name="sign_out_description">You will have to sign in again to see your notes.</string>
+    <string name="delete_account">Delete account</string>
+    <string name="delete_account_title">Delete account?</string>
+    <string name="delete_account_description">You will lose all your notes and your account will be deleted. This action is irreversible.</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="password_error_too_short">Password must be at least 6 characters long.</string>
+    <string name="password_error_no_uppercase">Password must contain at least one uppercase letter.</string>
+    <string name="password_error_no_digit">Password must contain at least one digit.</string>
+    <string name="password_error_no_letter">Password must contain at least one letter.</string>
+    <string name="confirm_password_error_mismatch">Passwords must match</string>
+    <string name="email_error_empty">Email cannot be empty.</string>
+    <string name="email_error_invalid">Email is invalid.</string>
+    <string name="network_error_timeout">Timeout</string>
+    <string name="network_error_unknown">Unknown error</string>
+    <string name="network_error_bad_request">Bad request</string>
+    <string name="network_error_unauthorized">Unauthorized</string>
+    <string name="network_error_forbidden">Forbidden</string>
+    <string name="network_error_not_found">Not found</string>
+    <string name="network_error_server_error">Server error</string>
+    <string name="icon_clear">Clear</string>
+    <string name="placeholder_email">Enter email</string>
+    <string name="icon_visibility">visibility on</string>
+    <string name="icon_visibility_off">visibility off</string>
+    <string name="icon_lock">Lock</string>
+
 </resources>
