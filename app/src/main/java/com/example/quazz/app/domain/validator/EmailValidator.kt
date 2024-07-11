@@ -1,9 +1,10 @@
 package com.example.quazz.app.domain.validator
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.example.quazz.app.domain.Error
 import com.example.quazz.app.domain.Result
 import javax.inject.Inject
+
 typealias EmailError = Error.EmailError
 typealias EmailResult = Result<Unit, EmailError>
 class EmailValidator @Inject constructor(){
@@ -12,7 +13,7 @@ class EmailValidator @Inject constructor(){
             return Result.Error(Error.EmailError.EMPTY)
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
             return Result.Error(Error.EmailError.INVALID_EMAIL)
         }
 

@@ -11,6 +11,10 @@ class PasswordValidator @Inject constructor() {
         if (password.length < 6) {
             return Result.Error(Error.PasswordError.TOO_SHORT)
         }
+        val hasLetter = password.any { it.isLetter() }
+        if (!hasLetter) {
+            return Result.Error(Error.PasswordError.NO_LETTER)
+        }
         val hasUppercase = password.any { it.isUpperCase() }
         if (!hasUppercase) {
             return Result.Error(Error.PasswordError.NO_UPPERCASE)
@@ -18,10 +22,6 @@ class PasswordValidator @Inject constructor() {
         val hasDigit = password.any { it.isDigit() }
         if (!hasDigit) {
             return Result.Error(Error.PasswordError.NO_DIGIT)
-        }
-        val hasLetter = password.any { it.isLetter() }
-        if (!hasLetter) {
-            return Result.Error(Error.PasswordError.NO_LETTER)
         }
         return Result.Success(Unit)
     }

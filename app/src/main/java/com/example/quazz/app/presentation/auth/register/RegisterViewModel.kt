@@ -1,5 +1,6 @@
 package com.example.quazz.app.presentation.auth.register
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quazz.app.domain.Error
@@ -39,9 +40,11 @@ class RegisterViewModel @Inject constructor(
             is RegisterEvent.ClearPasswordError -> updatePasswordError(emptyUiText)
             is RegisterEvent.ClearEmailError -> updateEmailError(emptyUiText)
             is RegisterEvent.ClearConfirmPasswordError -> updateConfirmPasswordError(emptyUiText)
-            is RegisterEvent.ClearSignUpError -> _uiState.value = _uiState.value.copy(signUpError = emptyUiText)
+            is RegisterEvent.ClearSignUpError -> updateSignUpError(emptyUiText)
         }
     }
+
+    // region update state
 
     private fun updateEmailError(emailError: UiText) {
         _uiState.value = _uiState.value.copy(emailError = emailError)
@@ -53,7 +56,8 @@ class RegisterViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(confirmPasswordError = confirmPasswordError)
     }
 
-    private fun updateLoading(isLoading: Boolean) {
+    @VisibleForTesting
+    fun updateLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(loading = isLoading)
     }
 
@@ -73,6 +77,7 @@ class RegisterViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(signUpError = signUpError)
     }
 
+    // endregion
     private fun onSignUpClick() {
         val passwordResult = passwordValidator.execute(_uiState.value.password)
         val confirmPasswordResult = confirmPasswordValidator.execute(_uiState.value.password, _uiState.value.confirmPassword)
