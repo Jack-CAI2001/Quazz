@@ -1,48 +1,33 @@
 package com.example.quazz.app.presentation.auth.register
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quazz.R
 import com.example.quazz.core.components.OutlinedTextFieldValidation
+import com.example.quazz.core.components.QuazzSnackbar
 import com.example.quazz.core.components.QuazzTopAppBar
+import com.example.quazz.core.components.outlinedTextField.OutlinedTextFieldEmail
+import com.example.quazz.core.components.outlinedTextField.OutlinedTextFieldPassword
 import com.example.quazz.ui.theme.AppTheme
 import com.example.quazz.ui.theme.QuazzTheme.dimension
 
@@ -52,23 +37,14 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState()}
-    val context = LocalContext.current
-    LaunchedEffect(key1 = state.signUpError) {
-        if (state.signUpError.asString(context).isNotEmpty()) {
-            snackbarHostState.showSnackbar(
-                withDismissAction = true,
-                message = state.signUpError.asString(context))
-            viewModel.onEvent(RegisterEvent.ClearSignUpError)
-        }
-    }
+    val errorMessage = state.signUpError.asString()
     Scaffold(
         topBar = {
             QuazzTopAppBar(
                 title = stringResource(R.string.sign_up),
                 canNavigateBack = true,
                 navigateUp = navigation,
-                isLoading = state.loading
+                isLoading = state.isLoading
             )
         },
     ) {
@@ -76,7 +52,11 @@ fun RegisterScreen(
             modifier = Modifier.padding(it),
             onEvent = viewModel::onEvent,
             state = state)
-        SnackbarHost(hostState = snackbarHostState, Modifier.padding(it))
+        QuazzSnackbar(
+            paddingValues = it,
+            snackbarMessage = errorMessage,
+            onDismissed = { viewModel.onEvent(RegisterEvent.ClearSignUpError) }
+        )
     }
 }
 
@@ -84,15 +64,14 @@ fun RegisterScreen(
 fun RegisterContent(
     modifier: Modifier = Modifier,
     onEvent: (RegisterEvent) -> Unit,
-    state: RegisterState = RegisterState()) {
+    state: RegisterState) {
 
     val focusManager = LocalFocusManager.current
 
     Column(
         modifier = modifier
             .padding(horizontal = dimension.paddingM)
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -164,43 +143,19 @@ fun OutlinedTextFieldValidationPassword(
     errorMessage: String,
     onFocus: () -> Unit
 ) {
-    var showPassword by remember { mutableStateOf(false) }
     OutlinedTextFieldValidation(
-        onFocus = onFocus,
-        value = value,
-        onValueChange = onValueChange,
+        outlinedTextField = {
+            OutlinedTextFieldPassword(
+                value = value,
+                onValueChange = onValueChange,
+                label = label,
+                placeholder = placeholder,
+                isError = isError,
+                onFocus = onFocus
+            )
+        },
         isError = isError,
-        errorMessage = errorMessage,
-        leadingIcon = {
-            Icon(imageVector = Icons.Default.Lock,
-                contentDescription = stringResource(id = R.string.icon_lock
-        )) },
-        keyboardOptions = KeyboardOptions(
-            autoCorrect = false,
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
-        ),
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-        label = { Text(text = label) },
-        placeholder = { Text(text = placeholder) },
-        trailingIcon = {
-            val (iconId, contentDescription) = if (showPassword) {
-                Pair(
-                    R.drawable.visibility_24,
-                    stringResource(id = R.string.icon_visibility)
-                )
-            } else {
-                Pair(R.drawable.visibility_off_24,
-                    stringResource(id = R.string.icon_visibility_off)
-                )
-            }
-            IconButton(onClick = { showPassword = !showPassword }) {
-                Icon(
-                    painterResource(id = iconId),
-                    contentDescription = contentDescription,
-                )
-            }
-        }
+        errorMessage = errorMessage
     )
 }
 
@@ -214,31 +169,29 @@ fun OutlinedTextFieldValidationEmail(
     onFocus: () -> Unit
 ) {
     OutlinedTextFieldValidation(
-        onFocus = onFocus,
-        value = value,
-        onValueChange = onValueChange,
+        outlinedTextField =
+        {
+        OutlinedTextFieldEmail(
+            value = value,
+            onValueChange = onValueChange,
+            isError = isError,
+            onFocus = onFocus,
+            onIconButtonClick = { onIconButtonClick() })
+        },
         isError = isError,
-        errorMessage = errorMessage,
-        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = stringResource(id = R.string.email)) },
-        keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Email),
-        label = { Text(text = stringResource(id = R.string.email)) },
-        placeholder = { Text(text = stringResource(id = R.string.placeholder_email)) },
-        trailingIcon = {
-            IconButton(onClick = { onIconButtonClick() }) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = stringResource(id = R.string.icon_clear),
-                )
-            }
-        }
+        errorMessage = errorMessage
     )
 }
-@Preview(showBackground = true, showSystemUi = true)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@PreviewLightDark
 @Composable
 fun RegisterContentPreview() {
     AppTheme {
-        RegisterContent(
-            onEvent = {},
-        )
+        Scaffold {
+            RegisterContent(
+                onEvent = {},
+                state = RegisterState()
+            )
+        }
     }
 }

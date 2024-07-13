@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.example.quazz.core.components.outlinedTextField.QuazzOutlinedTextField
 import com.example.quazz.ui.theme.QuazzTheme.dimension
 
 @OptIn(ExperimentalFoundationApi::class)

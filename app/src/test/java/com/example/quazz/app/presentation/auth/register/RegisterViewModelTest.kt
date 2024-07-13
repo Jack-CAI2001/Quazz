@@ -150,7 +150,7 @@ class RegisterViewModelTest {
             mockSignUpUseCase.invoke(email, any())
             viewModel.updateLoading(false)
         }
-        Assertions.assertEquals(viewModel.uiState.value.loading, false)
+        Assertions.assertEquals(viewModel.uiState.value.isLoading, false)
         Assertions.assertEquals(viewModel.uiState.value.email, "")
         Assertions.assertEquals(viewModel.uiState.value.password, "")
         Assertions.assertEquals(viewModel.uiState.value.confirmPassword, "")

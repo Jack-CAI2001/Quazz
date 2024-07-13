@@ -1,4 +1,5 @@
-package com.example.quazz.core.components
+package com.example.quazz.core.components.outlinedTextField
+
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.example.quazz.core.components.Background
 import com.example.quazz.ui.theme.QuazzTheme
 import kotlinx.coroutines.launch
 

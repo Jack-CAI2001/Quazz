@@ -29,10 +29,13 @@
     <string name="network_error_forbidden">Forbidden</string>
     <string name="network_error_not_found">Not found</string>
     <string name="network_error_server_error">Server error</string>
+    <string name="network_error_no_connection">No connection</string>
+    <string name="network_error_invalid_credentials">Invalid credentials</string>
     <string name="icon_clear">Clear</string>
     <string name="placeholder_email">Enter email</string>
     <string name="icon_visibility">visibility on</string>
     <string name="icon_visibility_off">visibility off</string>
     <string name="icon_lock">Lock</string>
+    <string name="common_error_empty_field">Field cannot be empty.</string>
 
 </resources>

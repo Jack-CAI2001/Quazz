@@ -4,24 +4,22 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.quazz.QuazzAppState
 
 @SuppressLint("RestrictedApi")
 @Composable
 fun Nav() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Route.AuthRoute.route) {
-        authGraph(navController)
-        appGraph(navController)
+    val appState = rememberAppState()
+    NavHost(navController = appState.navController, startDestination = Route.AuthRoute.route) {
+        authGraph(appState)
+        appGraph(appState)
     }
 
     // to suppress
-    navController.addOnDestinationChangedListener { controller, _, _ ->
+    appState.navController.addOnDestinationChangedListener { controller, _, _ ->
         val routes = controller
             .currentBackStack.value
             .map { it.destination.route }
@@ -29,3 +27,9 @@ fun Nav() {
         Log.d("BackStackLog", "BackStack: $routes")
     }
 }
+
+@Composable
+fun rememberAppState(navController: NavHostController = rememberNavController()) =
+    remember(navController) {
+        QuazzAppState(navController)
+    }

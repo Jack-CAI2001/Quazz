@@ -8,6 +8,8 @@ sealed interface DataError: Error {
         FORBIDDEN,
         NOT_FOUND,
         SERVER_ERROR,
+        INVALID_CREDENTIALS,
+        NETWORK_ERROR,
         UNKNOWN
     }
 }

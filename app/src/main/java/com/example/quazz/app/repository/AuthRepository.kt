@@ -8,4 +8,5 @@ class AuthRepository @Inject constructor (
 ) {
     suspend fun signUp(email: String, password: String) = accountService.signUp(email, password)
 
+    suspend fun signIn(email: String, password: String) = accountService.signIn(email, password)
 }

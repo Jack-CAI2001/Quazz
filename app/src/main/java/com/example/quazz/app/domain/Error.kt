@@ -17,6 +17,9 @@ sealed interface Error {
         EMPTY,
         INVALID_EMAIL
     }
+    enum class CommonError: Error {
+        EMPTY_FIELD
+    }
 }
 
 private fun Error.asUiText(): UiText {
@@ -41,6 +44,9 @@ private fun Error.asUiText(): UiText {
         DataError.Network.FORBIDDEN -> UiText.StringResource(R.string.network_error_forbidden)
         DataError.Network.NOT_FOUND -> UiText.StringResource(R.string.network_error_not_found)
         DataError.Network.SERVER_ERROR -> UiText.StringResource(R.string.network_error_server_error)
+        DataError.Network.INVALID_CREDENTIALS -> UiText.StringResource(R.string.network_error_invalid_credentials)
+        DataError.Network.NETWORK_ERROR -> UiText.StringResource(R.string.network_error_no_connection)
+        Error.CommonError.EMPTY_FIELD -> UiText.StringResource(R.string.common_error_empty_field)
     }
 }
 

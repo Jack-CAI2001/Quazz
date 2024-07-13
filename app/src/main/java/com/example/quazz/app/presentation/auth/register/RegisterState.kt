@@ -9,6 +9,6 @@ data class RegisterState(
     val passwordError: UiText = UiText.DynamicString(""),
     val confirmPassword: String = "",
     val confirmPasswordError: UiText = UiText.DynamicString(""),
-    val loading: Boolean = false,
+    val isLoading: Boolean = false,
     val signUpError:  UiText = UiText.DynamicString("")
 )

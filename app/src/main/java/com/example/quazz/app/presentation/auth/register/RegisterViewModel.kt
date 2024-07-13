@@ -58,7 +58,7 @@ class RegisterViewModel @Inject constructor(
 
     @VisibleForTesting
     fun updateLoading(isLoading: Boolean) {
-        _uiState.value = _uiState.value.copy(loading = isLoading)
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
     private fun updateEmail(newEmail: String) {
