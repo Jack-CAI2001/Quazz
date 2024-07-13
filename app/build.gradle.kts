@@ -71,6 +71,9 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    // Splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     //Hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:2.48")

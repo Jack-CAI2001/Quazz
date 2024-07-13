@@ -7,6 +7,6 @@ class AuthRepository @Inject constructor (
     private val accountService: AccountService
 ) {
     suspend fun signUp(email: String, password: String) = accountService.signUp(email, password)
-
     suspend fun signIn(email: String, password: String) = accountService.signIn(email, password)
+    fun hasUser() = accountService.hasUser()
 }

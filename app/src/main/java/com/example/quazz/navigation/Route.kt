@@ -9,4 +9,5 @@ sealed class Route(val route: String) {
     data object SearchRoute : Route(route = "Search")
     data object ProfileRoute : Route(route = "Profile")
     data object CreateRoute : Route(route = "Create")
+    data object SplashRoute: Route(route = "Splash")
 }
