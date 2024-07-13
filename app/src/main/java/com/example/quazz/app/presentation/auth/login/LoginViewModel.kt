@@ -1,5 +1,6 @@
 package com.example.quazz.app.presentation.auth.login
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quazz.app.domain.Error
@@ -51,7 +52,8 @@ class LoginViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(fieldsError = error)
     }
 
-    private fun updateLoading(isLoading: Boolean) {
+    @VisibleForTesting
+    fun updateLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 

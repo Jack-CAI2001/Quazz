@@ -7,18 +7,15 @@ import com.example.quazz.app.domain.validator.ConfirmPasswordValidator
 import com.example.quazz.app.domain.validator.EmailValidator
 import com.example.quazz.app.domain.validator.PasswordValidator
 import com.example.quazz.app.presentation.UiText
+import com.example.quazz.app.presentation.ViewModelTest
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -27,7 +24,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 
-class RegisterViewModelTest {
+class RegisterViewModelTest: ViewModelTest() {
     private val mockSignUpUseCase = mockk<SignUpUseCase>(relaxed = true)
     private val passwordValidator = mockk<PasswordValidator>(relaxed = true)
     private val confirmPasswordValidator = mockk<ConfirmPasswordValidator>(relaxed = true)
@@ -36,8 +33,8 @@ class RegisterViewModelTest {
     private lateinit var viewModel: RegisterViewModel
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
-    fun beforeEach() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+    override fun beforeEach() {
+        super.beforeEach()
         viewModel = spyk(
             RegisterViewModel(
                 mockSignUpUseCase,
@@ -49,8 +46,8 @@ class RegisterViewModelTest {
     }
 
     @AfterEach
-    fun afterEach() {
-        Dispatchers.resetMain()
+    override fun afterEach() {
+        super.afterEach()
         clearAllMocks()
     }
 
@@ -120,7 +117,6 @@ class RegisterViewModelTest {
         }
 
         @Test
-        @DisplayName("Description here")
         fun clearSignUpError() {
             // WHEN
             viewModel.onEvent(RegisterEvent.ClearSignUpError)
@@ -130,7 +126,7 @@ class RegisterViewModelTest {
     }
 
     @Test
-    @DisplayName("Description here")
+    @DisplayName("When sign up click Then success")
     fun onSignUpClick() = runTest {
         // GIVEN
         val email = "email@example.com"

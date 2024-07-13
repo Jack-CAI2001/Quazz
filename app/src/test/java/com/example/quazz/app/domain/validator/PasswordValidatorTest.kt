@@ -24,7 +24,7 @@ class PasswordValidatorTest {
     @DisplayName("password fail")
     inner class PasswordFail {
         @Test
-        @DisplayName("Description here")
+        @DisplayName("GIVEN short password THEN return error")
         fun length_error() {
             // GIVEN
             val password = "passw"
@@ -35,7 +35,7 @@ class PasswordValidatorTest {
             Assertions.assertEquals((result as Result.Error).error, PasswordError.TOO_SHORT)
         }
         @Test
-        @DisplayName("Description here")
+        @DisplayName("GIVEN no uppercase THEN return error")
         fun uppercase_error() {
             // GIVEN
             val password = "password"
@@ -46,7 +46,7 @@ class PasswordValidatorTest {
             Assertions.assertEquals((result as Result.Error).error, PasswordError.NO_UPPERCASE)
         }
         @Test
-        @DisplayName("Description here")
+        @DisplayName("GIVEN no digit THEN return error")
         fun digit_error() {
             // GIVEN
             val password = "passwordAz"
@@ -57,7 +57,7 @@ class PasswordValidatorTest {
             Assertions.assertEquals((result as Result.Error).error, PasswordError.NO_DIGIT)
         }
         @Test
-        @DisplayName("Description here")
+        @DisplayName("GIVEN no letter THEN return error")
         fun letter_error() {
             // GIVEN
             val password = "123456"
