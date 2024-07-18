@@ -8,7 +8,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -31,6 +33,13 @@ class AccountServiceImpl @Inject constructor() : AccountService {
 
     override val currentUserId: String
         get() = Firebase.auth.currentUser?.uid.orEmpty()
+
+    override suspend fun getUser(): Result<FirebaseUser, DataError.Network> {
+        if (hasUser()) {
+            return Result.Success(Firebase.auth.currentUser!!)
+        }
+        return Result.Error(DataError.Network.UNAUTHORIZED)
+    }
 
     override fun hasUser(): Boolean {
         return Firebase.auth.currentUser != null
@@ -64,10 +73,23 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         }
     }
 
-    override suspend fun signUp(email: String, password: String): Result<Unit, DataError.Network> {
+    override suspend fun signUp(pseudo: String, email: String, password: String): Result<Unit, DataError.Network> {
 
         return try {
-            Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+            val authResult = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+            val uid = authResult.user!!.uid
+            val user = hashMapOf(
+                "uid" to uid,
+                "email" to email,
+                "pseudo" to pseudo,
+            )
+            Firebase.firestore
+                .collection("user")
+                .document(uid)
+                .set(user)
+                .addOnSuccessListener {
+                    Firebase.auth.signOut()
+                }
             Result.Success(Unit)
         } catch (e: Exception) {
             when(e) {
@@ -88,7 +110,7 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         }
     }
 
-    override suspend fun signOut() {
+    override fun signOut() {
         Firebase.auth.signOut()
     }
 

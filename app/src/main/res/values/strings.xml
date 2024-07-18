@@ -37,5 +37,14 @@
     <string name="icon_visibility_off">visibility off</string>
     <string name="icon_lock">Lock</string>
     <string name="common_error_empty_field">Field cannot be empty.</string>
+    <string name="edit_password">Edit password</string>
+    <string name="icon_arrow_right">Arrow right</string>
+    <string name="log_out_text_description">Logging out will end your current session. You\'ll need to log in again to continue using the app</string>
+    <string name="log_out_text">Log out</string>
+    <string name="save">Save</string>
+    <string name="edit_pseudo">Edit Pseudo</string>
+    <string name="loading">Loading...</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="placeholder_pseudo">Enter pseudo</string>
 
 </resources>

@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +31,7 @@ import com.example.quazz.core.components.QuazzSnackbar
 import com.example.quazz.core.components.QuazzTopAppBar
 import com.example.quazz.core.components.outlinedTextField.OutlinedTextFieldEmail
 import com.example.quazz.core.components.outlinedTextField.OutlinedTextFieldPassword
+import com.example.quazz.core.components.outlinedTextField.QuazzOutlinedTextField
 import com.example.quazz.ui.theme.AppTheme
 import com.example.quazz.ui.theme.QuazzTheme.dimension
 
@@ -80,6 +84,16 @@ fun RegisterContent(
         Text(text = stringResource(id = R.string.sign_up), style = MaterialTheme.typography.displayLarge)
 
         Spacer(modifier = Modifier.padding(dimension.paddingS))
+
+        OutlinedTextFieldValidationPseudo(
+            value = state.pseudo,
+            onValueChange = { onEvent(RegisterEvent.UpdatePseudo(it)) },
+            isError = state.pseudoError.asString().isNotEmpty(),
+            errorMessage = state.pseudoError.asString(),
+            onFocus = { onEvent(RegisterEvent.ClearPseudoError) }
+        )
+        Spacer(modifier = Modifier.padding(dimension.paddingXS))
+
         OutlinedTextFieldValidationEmail(
             value = state.email,
             onValueChange = { onEvent(RegisterEvent.UpdateEmail(it)) },
@@ -131,6 +145,30 @@ fun SignUpButton(onClick: () -> Unit) {
             modifier = Modifier.padding(vertical = dimension.paddingS)
         )
     }
+}
+
+@Composable
+fun OutlinedTextFieldValidationPseudo(
+    value: String,
+    onValueChange: (String) -> Unit,
+    isError: Boolean,
+    errorMessage: String,
+    onFocus: () -> Unit
+) {
+    OutlinedTextFieldValidation(
+        outlinedTextField = {
+            QuazzOutlinedTextField(
+                value = value,
+                onValueChange = onValueChange,
+                leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = stringResource(id = R.string.edit_pseudo))},
+                label = { Text(text = stringResource(id = R.string.edit_pseudo)) },
+                placeholder = { Text(text = stringResource(id = R.string.placeholder_pseudo)) },
+                isError = isError,
+                onFocus = onFocus
+            )
+        },
+        isError = isError,
+        errorMessage = errorMessage)
 }
 
 @Composable

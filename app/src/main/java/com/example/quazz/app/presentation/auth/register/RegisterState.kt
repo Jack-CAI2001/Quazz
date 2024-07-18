@@ -5,6 +5,8 @@ import com.example.quazz.app.presentation.UiText
 data class RegisterState(
     val email: String = "",
     val emailError: UiText = UiText.DynamicString(""),
+    val pseudo: String = "",
+    val pseudoError: UiText = UiText.DynamicString(""),
     val password: String = "",
     val passwordError: UiText = UiText.DynamicString(""),
     val confirmPassword: String = "",

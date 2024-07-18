@@ -6,7 +6,10 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor (
     private val accountService: AccountService
 ) {
-    suspend fun signUp(email: String, password: String) = accountService.signUp(email, password)
+    suspend fun signUp(pseudo: String, email: String, password: String) = accountService.signUp(pseudo, email, password)
     suspend fun signIn(email: String, password: String) = accountService.signIn(email, password)
     fun hasUser() = accountService.hasUser()
+    val currentUserUid = accountService.currentUserId
+    suspend fun getUser() = accountService.getUser()
+    fun logOut() = accountService.signOut()
 }
