@@ -6,6 +6,7 @@ import com.example.quazz.app.domain.SignUpUseCase
 import com.example.quazz.app.domain.validator.ConfirmPasswordValidator
 import com.example.quazz.app.domain.validator.EmailValidator
 import com.example.quazz.app.domain.validator.PasswordValidator
+import com.example.quazz.app.domain.validator.PseudoValidator
 import com.example.quazz.app.presentation.UiText
 import com.example.quazz.app.presentation.ViewModelTest
 import io.mockk.clearAllMocks
@@ -29,6 +30,7 @@ class RegisterViewModelTest: ViewModelTest() {
     private val passwordValidator = mockk<PasswordValidator>(relaxed = true)
     private val confirmPasswordValidator = mockk<ConfirmPasswordValidator>(relaxed = true)
     private val emailValidator = mockk<EmailValidator>(relaxed = true)
+    private val pseudoValidator = mockk<PseudoValidator>(relaxed = true)
 
     private lateinit var viewModel: RegisterViewModel
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,7 +42,8 @@ class RegisterViewModelTest: ViewModelTest() {
                 mockSignUpUseCase,
                 passwordValidator,
                 confirmPasswordValidator,
-                emailValidator
+                emailValidator,
+                pseudoValidator
             )
         )
     }
@@ -87,6 +90,17 @@ class RegisterViewModelTest: ViewModelTest() {
             // THEN
             Assertions.assertEquals(viewModel.uiState.value.confirmPassword, confirmPassword)
         }
+        @Test
+        @DisplayName("GIVEN pseudo  THEN pseudo")
+        fun updatePseudo() {
+            // GIVEN
+            val pseudo = "pseudo"
+            // WHEN
+            viewModel.onEvent(RegisterEvent.UpdatePseudo(pseudo))
+
+            // THEN
+            Assertions.assertEquals(viewModel.uiState.value.pseudo, pseudo)
+        }
     }
 
     @Nested
@@ -117,6 +131,14 @@ class RegisterViewModelTest: ViewModelTest() {
         }
 
         @Test
+        fun clearPseudoError() {
+            // WHEN
+            viewModel.onEvent(RegisterEvent.ClearPseudoError)
+            // THEN
+            Assertions.assertEquals(viewModel.uiState.value.pseudoError, UiText.DynamicString(""))
+        }
+
+        @Test
         fun clearSignUpError() {
             // WHEN
             viewModel.onEvent(RegisterEvent.ClearSignUpError)
@@ -133,7 +155,8 @@ class RegisterViewModelTest: ViewModelTest() {
         every { emailValidator.execute(any()) } returns Result.Success(Unit)
         every { passwordValidator.execute(any()) } returns Result.Success(Unit)
         every { confirmPasswordValidator.execute(any(), any()) } returns Result.Success(Unit)
-        coEvery { mockSignUpUseCase.invoke(any(), any()) } returns Result.Success(Unit)
+        every { pseudoValidator.execute(any()) } returns Result.Success(Unit)
+        coEvery { mockSignUpUseCase.invoke(any(), any(), any()) } returns Result.Success(Unit)
 
         viewModel.onEvent(RegisterEvent.UpdateEmail(email))
 
@@ -143,12 +166,13 @@ class RegisterViewModelTest: ViewModelTest() {
         // THEN
         coVerifyOrder {
             viewModel.updateLoading(true)
-            mockSignUpUseCase.invoke(email, any())
+            mockSignUpUseCase.invoke(any(), email, any())
             viewModel.updateLoading(false)
         }
         Assertions.assertEquals(viewModel.uiState.value.isLoading, false)
         Assertions.assertEquals(viewModel.uiState.value.email, "")
         Assertions.assertEquals(viewModel.uiState.value.password, "")
+        Assertions.assertEquals(viewModel.uiState.value.pseudo, "")
         Assertions.assertEquals(viewModel.uiState.value.confirmPassword, "")
     }
 
@@ -160,7 +184,8 @@ class RegisterViewModelTest: ViewModelTest() {
         every { emailValidator.execute(any()) } returns Result.Success(Unit)
         every { passwordValidator.execute(any()) } returns Result.Success(Unit)
         every { confirmPasswordValidator.execute(any(), any()) } returns Result.Success(Unit)
-        coEvery { mockSignUpUseCase.invoke(any(), any()) } returns Result.Error(DataError.Network.UNKNOWN)
+        every { pseudoValidator.execute(any()) } returns Result.Success(Unit)
+        coEvery { mockSignUpUseCase.invoke(any(), any(), any()) } returns Result.Error(DataError.Network.UNKNOWN)
 
         viewModel.onEvent(RegisterEvent.UpdateEmail("email@example.com"))
 
@@ -170,12 +195,13 @@ class RegisterViewModelTest: ViewModelTest() {
         // THEN
         coVerifyOrder {
             viewModel.updateLoading(true)
-            mockSignUpUseCase.invoke(email, any())
+            mockSignUpUseCase.invoke(any(), email, any())
             viewModel.updateLoading(false)
         }
         Assertions.assertEquals(viewModel.uiState.value.email, email)
         Assertions.assertEquals(viewModel.uiState.value.password, "")
         Assertions.assertEquals(viewModel.uiState.value.confirmPassword, "")
+        Assertions.assertEquals(viewModel.uiState.value.pseudo, "")
         Assertions.assertNotEquals(viewModel.uiState.value.signUpError, "")
     }
 }

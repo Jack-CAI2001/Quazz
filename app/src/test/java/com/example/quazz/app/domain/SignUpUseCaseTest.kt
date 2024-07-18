@@ -11,29 +11,30 @@ class SignUpUseCaseTest {
 
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
     private val userCase = SignUpUseCase(mockAuthRepository)
+    private val pseudo = ""
     private val email = ""
     private val password = ""
     @Test
     fun success() = runTest{
         // GIVEN
         coEvery {
-            mockAuthRepository.signUp(any(), any())
+            mockAuthRepository.signUp(any(), any(), any())
         } returns Result.Success(Unit)
         // WHEN
-        userCase.invoke(email, password)
+        userCase.invoke(pseudo,email, password)
         //THEN
-        coVerify (exactly = 1) { mockAuthRepository.signUp(any(), any()) }
+        coVerify (exactly = 1) { mockAuthRepository.signUp(any(), any(), any()) }
     }
 
     @Test
     fun failure() = runTest{
         // GIVEN
         coEvery {
-            mockAuthRepository.signUp(any(), any())
+            mockAuthRepository.signUp(any(), any(), any())
         } returns Result.Error(mockk())
         // WHEN
-        userCase.invoke(email, password)
+        userCase.invoke(pseudo, email, password)
         //THEN
-        coVerify (exactly = 1) { mockAuthRepository.signUp(any(), any()) }
+        coVerify (exactly = 1) { mockAuthRepository.signUp(any(), any(), any()) }
     }
 }
