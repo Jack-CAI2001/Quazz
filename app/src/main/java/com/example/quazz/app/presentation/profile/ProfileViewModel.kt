@@ -1,5 +1,6 @@
 package com.example.quazz.app.presentation.profile
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quazz.app.domain.GetUserUseCase
@@ -44,10 +45,13 @@ class ProfileViewModel @Inject constructor(
 
     // region update state
 
-    private fun updateLoading(isLoading: Boolean) {
+    @VisibleForTesting
+    fun updateLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
-    private fun updateIsUserConnected(isUserConnected: Boolean) {
+
+    @VisibleForTesting
+    fun updateIsUserConnected(isUserConnected: Boolean) {
         _uiState.value = _uiState.value.copy(isUserConnected = isUserConnected)
     }
 
@@ -76,7 +80,8 @@ class ProfileViewModel @Inject constructor(
         updateIsUserConnected(false)
     }
 
-    private fun getUser() {
+    @VisibleForTesting
+    fun getUser() {
         viewModelScope.launch {
             updateLoading(true)
             when (val result = getUserUseCase.invoke()) {
@@ -98,10 +103,12 @@ class ProfileViewModel @Inject constructor(
             when(val result = updateUserUseCase.invoke(_uiState.value.user.copy(pseudo = _uiState.value.pseudoText))) {
                 is Result.Success -> {
                     updateUser(_uiState.value.user.copy(pseudo = _uiState.value.pseudoText))
+                    updatePseudoText("")
                     updateLoading(false)
                 }
                 is Result.Error -> {
                     updateLoading(false)
+                    updatePseudoText("")
                     updateError(result.asErrorUiText())
                 }
             }
