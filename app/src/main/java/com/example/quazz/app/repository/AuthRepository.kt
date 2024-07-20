@@ -12,4 +12,6 @@ class AuthRepository @Inject constructor (
     val currentUserUid = accountService.currentUserId
     suspend fun getUser() = accountService.getUser()
     fun logOut() = accountService.signOut()
+    suspend fun updatePassword(newPassword: String, oldPassword: String) = accountService.updatePassword(newPassword, oldPassword)
+    suspend fun updateEmail(newEmail: String, password: String) = accountService.updateEmail(newEmail, password)
 }

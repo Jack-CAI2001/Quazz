@@ -16,4 +16,6 @@ interface AccountService {
     suspend fun signUp(pseudo: String, email: String, password: String): Result<Unit, DataError.Network>
     fun signOut()
     suspend fun deleteAccount()
+    suspend fun updatePassword(newPassword: String, oldPassword: String): Result<Unit, DataError.Network>
+    suspend fun updateEmail(newEmail: String, password: String): Result<Unit, DataError.Network>
 }

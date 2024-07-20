@@ -6,6 +6,7 @@ import com.example.quazz.app.model.User
 import com.example.quazz.app.source.network.service.AccountService
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
@@ -116,5 +117,34 @@ class AccountServiceImpl @Inject constructor() : AccountService {
 
     override suspend fun deleteAccount() {
         Firebase.auth.currentUser!!.delete().await()
+    }
+
+    private suspend fun reAuthenticate(user: FirebaseUser, email: String, password: String) {
+        val credential = EmailAuthProvider.getCredential(email, password)
+        user.reauthenticate(credential).await()
+    }
+
+    override suspend fun updateEmail(newEmail: String, password: String): Result<Unit, DataError.Network> {
+        return try {
+            val user = Firebase.auth.currentUser!!
+            val email = user.email!!
+            reAuthenticate(user, email, password)
+            user.verifyBeforeUpdateEmail(newEmail).await()
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(DataError.Network.UNKNOWN)
+        }
+    }
+
+    override suspend fun updatePassword(newPassword: String, oldPassword: String): Result<Unit, DataError.Network> {
+        return try {
+            val user = Firebase.auth.currentUser!!
+            val email = user.email!!
+            reAuthenticate(user, email, oldPassword)
+            user.updatePassword(newPassword).await()
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(DataError.Network.UNKNOWN)
+        }
     }
 }
