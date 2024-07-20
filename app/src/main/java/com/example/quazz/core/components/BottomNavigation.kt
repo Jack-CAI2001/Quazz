@@ -10,15 +10,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.quazz.app.presentation.create.CreateScreen
 import com.example.quazz.navigation.BottomNavItem
 import com.example.quazz.navigation.Route
-import com.example.quazz.ui.theme.QuazzTheme
+import com.example.quazz.ui.theme.AppTheme
 
 @Composable
 fun BottomNavigationBar(navController: NavController, screens:  List<BottomNavItem>, startDestination: String) {
@@ -53,9 +51,9 @@ fun ScaffoldBottomApp(navController: NavController, content: @Composable (Paddin
     val screens = listOf(
         BottomNavItem.Home,
         BottomNavItem.Search,
+        BottomNavItem.Create,
         BottomNavItem.Profile,
-        BottomNavItem.Create
-    )
+        )
     val startDestination = Route.HomeRoute.route
     Scaffold(
         bottomBar = {
@@ -69,7 +67,7 @@ fun ScaffoldBottomApp(navController: NavController, content: @Composable (Paddin
 @PreviewLightDark
 @Composable
 fun ScaffoldBottomAppPreview() {
-    QuazzTheme {
+    AppTheme {
         ScaffoldBottomApp(navController = rememberNavController()) {
         }
     }

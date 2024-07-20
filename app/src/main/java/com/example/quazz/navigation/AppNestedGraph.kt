@@ -30,7 +30,9 @@ fun NavGraphBuilder.appGraph(appState: QuazzAppState){
         }
         composable(route = Route.ProfileRoute.route) {
             ScaffoldBottomApp(navController = appState.navController) {
-                ProfileScreen(it, appState.navController)
+                ProfileScreen(
+                    paddingValues = it,
+                    restartApp = { route -> appState.clearAndNavigate(route) })
             }
         }
         composable(route = Route.CreateRoute.route) {
