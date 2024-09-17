@@ -1,4 +1,4 @@
-package com.example.quazz
+package com.example.quazz.app.presentation.model
 
 sealed class QuizItem {
     data class MultipleChoiceQuestion(
