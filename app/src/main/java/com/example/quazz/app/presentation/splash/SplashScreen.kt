@@ -34,6 +34,7 @@ fun SplashScreen(
 fun SplashScreenContent(
     onAppStart: () -> Unit
 ) {
+    // on peut remplacer par le loading ou faire une anim
     Column(
         modifier = Modifier
             .fillMaxWidth()
