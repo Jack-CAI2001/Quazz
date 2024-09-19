@@ -57,8 +57,7 @@ fun NavGraphBuilder.appGraph(appState: QuazzAppState){
                 animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
                 transformOrigin = TransformOrigin(0.9f, 0.9f)) }) {
             CreateQuizzScreen(
-                popUp = { appState.popUp() },
-                restartApp = { route -> appState.clearAndNavigate(route) }
+                popUp = { appState.popUp() }
             )
         }
     }

@@ -1,8 +1,10 @@
 package com.example.quazz.app.di.module
 
 import com.example.quazz.app.source.network.service.AccountService
+import com.example.quazz.app.source.network.service.QuestionnaireService
 import com.example.quazz.app.source.network.service.UserService
 import com.example.quazz.app.source.network.service.impl.AccountServiceImpl
+import com.example.quazz.app.source.network.service.impl.QuestionnaireServiceImpl
 import com.example.quazz.app.source.network.service.impl.UserServiceImpl
 import dagger.Binds
 import dagger.Module
@@ -17,4 +19,7 @@ abstract class ServiceModule {
 
     @Binds
     abstract fun provideUserService(impl: UserServiceImpl): UserService
+
+    @Binds
+    abstract fun provideQuestionnaireService(impl: QuestionnaireServiceImpl): QuestionnaireService
 }

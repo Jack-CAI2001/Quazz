@@ -62,7 +62,7 @@ fun CreateContent(
             .fillMaxSize(),
         floatingActionButton = {
             OutlinedButton(onClick = {
-                navController.navigate(Route.CreateRoute.route)
+                navController.navigate(Route.CreateRoute.route) // result activity ?
             }) {
                 this.AnimatedVisibility(visible = !expandable) {
                     Text(text = "Add Quizz")
