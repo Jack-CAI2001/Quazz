@@ -71,5 +71,19 @@
     <string name="proposition">Proposition</string>
     <string name="answer">Answer</string>
     <string name="enter_answer">Enter answer</string>
+    <string name="firestore_error_cancelled">Operation cancelled</string>
+    <string name="firestore_error_invalid_argument">Invalid Argument</string>
+    <string name="firestore_error_deadline_exceed">Deadline expired before operation could complete</string>
+    <string name="firestore_error_already_exists">Some document that we attempted to create already exists.</string>
+    <string name="firestore_error_permission_denied">Does not have permission</string>
+    <string name="firestore_error_resource_exhausted">Resource Exhausted</string>
+    <string name="firestore_error_failed_precondition">Failed precondition</string>
+    <string name="firestore_error_aborted">Operation aborted</string>
+    <string name="firestore_error_out_of_range">Operation was attempted past the valid range.</string>
+    <string name="firestore_error_unimplemented">Operation is not implemented or not supported/enabled.</string>
+    <string name="firestore_error_internal">Internal errors</string>
+    <string name="firestore_error_unavailable">Unavailable</string>
+    <string name="firestore_error_dataLoss">DataLoss</string>
+    <string name="firestore_error_unauthenticated">The request does not have valid authentication credentials for the operation.</string>
 
 </resources>

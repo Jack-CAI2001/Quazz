@@ -1,36 +1,23 @@
 package com.example.quazz.app.source.network.service.impl
 
 import com.example.quazz.app.domain.DataError
+import com.example.quazz.app.domain.Error
 import com.example.quazz.app.domain.Result
-import com.example.quazz.app.model.User
+import com.example.quazz.app.domain.handleError
 import com.example.quazz.app.source.network.service.AccountService
+import com.example.quazz.app.source.network.service.DatabaseConstants.User.EMAIL
+import com.example.quazz.app.source.network.service.DatabaseConstants.User.PSEUDO
+import com.example.quazz.app.source.network.service.DatabaseConstants.User.UID
 import com.google.firebase.Firebase
-import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import retrofit2.HttpException
 import javax.inject.Inject
 
 
 class AccountServiceImpl @Inject constructor() : AccountService {
-
-    override val currentUser: Flow<User?>
-        get() = callbackFlow {
-            val listener =
-                FirebaseAuth.AuthStateListener { auth ->
-//                    this.trySend(auth.currentUser?.let { User(it.uid) })
-                }
-            Firebase.auth.addAuthStateListener(listener)
-            awaitClose { Firebase.auth.removeAuthStateListener(listener) }
-        }
 
     override val currentUserId: String
         get() = Firebase.auth.currentUser?.uid.orEmpty()
@@ -46,43 +33,24 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         return Firebase.auth.currentUser != null
     }
 
-    override suspend fun signIn(email: String, password: String): Result<Unit, DataError.Network> {
+    override suspend fun signIn(email: String, password: String): Result<Unit, Error> {
         return try {
             Firebase.auth.signInWithEmailAndPassword(email, password).await()
             Result.Success(Unit)
         } catch (e: Exception) {
-            when(e) {
-                is HttpException -> {
-                    when (e.code()) {
-                        400 -> Result.Error(DataError.Network.BAD_REQUEST)
-                        408 -> Result.Error(DataError.Network.TIMEOUT)
-                        401 -> Result.Error(DataError.Network.UNAUTHORIZED)
-                        403 -> Result.Error(DataError.Network.FORBIDDEN)
-                        404 -> Result.Error(DataError.Network.NOT_FOUND)
-                        500 -> Result.Error(DataError.Network.SERVER_ERROR)
-                        else -> Result.Error(DataError.Network.UNKNOWN)
-                    }
-                }
-                is FirebaseNetworkException -> {
-                    Result.Error(DataError.Network.NETWORK_ERROR)
-                }
-                is FirebaseAuthInvalidCredentialsException -> {
-                    Result.Error(DataError.Network.INVALID_CREDENTIALS)
-                }
-                else -> Result.Error(DataError.Network.UNKNOWN)
-            }
+            handleError(e)
         }
     }
 
-    override suspend fun signUp(pseudo: String, email: String, password: String): Result<Unit, DataError.Network> {
+    override suspend fun signUp(pseudo: String, email: String, password: String): Result<Unit, Error> {
 
         return try {
             val authResult = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
             val uid = authResult.user!!.uid
             val user = hashMapOf(
-                "uid" to uid,
-                "email" to email,
-                "pseudo" to pseudo,
+                UID to uid,
+                EMAIL to email,
+                PSEUDO to pseudo,
             )
             Firebase.firestore
                 .collection("user")
@@ -93,21 +61,7 @@ class AccountServiceImpl @Inject constructor() : AccountService {
                 }
             Result.Success(Unit)
         } catch (e: Exception) {
-            when(e) {
-                is HttpException -> {
-                    when (e.code()) {
-                        400 -> Result.Error(DataError.Network.BAD_REQUEST)
-                        408 -> Result.Error(DataError.Network.TIMEOUT)
-                        401 -> Result.Error(DataError.Network.UNAUTHORIZED)
-                        403 -> Result.Error(DataError.Network.FORBIDDEN)
-                        404 -> Result.Error(DataError.Network.NOT_FOUND)
-                        500 -> Result.Error(DataError.Network.SERVER_ERROR)
-                        else -> Result.Error(DataError.Network.UNKNOWN)
-                    }
-                }
-                else -> Result.Error(DataError.Network.UNKNOWN)
-
-            }
+            handleError(e)
         }
     }
 
@@ -124,7 +78,7 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         user.reauthenticate(credential).await()
     }
 
-    override suspend fun updateEmail(newEmail: String, password: String): Result<Unit, DataError.Network> {
+    override suspend fun updateEmail(newEmail: String, password: String): Result<Unit, Error> {
         return try {
             val user = Firebase.auth.currentUser!!
             val email = user.email!!
@@ -132,11 +86,11 @@ class AccountServiceImpl @Inject constructor() : AccountService {
             user.verifyBeforeUpdateEmail(newEmail).await()
             Result.Success(Unit)
         } catch (e: Exception) {
-            Result.Error(DataError.Network.UNKNOWN)
+            handleError(e)
         }
     }
 
-    override suspend fun updatePassword(newPassword: String, oldPassword: String): Result<Unit, DataError.Network> {
+    override suspend fun updatePassword(newPassword: String, oldPassword: String): Result<Unit, Error> {
         return try {
             val user = Firebase.auth.currentUser!!
             val email = user.email!!
@@ -144,7 +98,7 @@ class AccountServiceImpl @Inject constructor() : AccountService {
             user.updatePassword(newPassword).await()
             Result.Success(Unit)
         } catch (e: Exception) {
-            Result.Error(DataError.Network.UNKNOWN)
+            handleError(e)
         }
     }
 }

@@ -266,7 +266,7 @@ private fun ChoiceQuestionContent(
                 modifier = Modifier.weight(weight = 1f),
                 colors = question.answer[index].let {
                     if (it) {
-                        OutlinedTextFieldDefaults.colors(unfocusedBorderColor = MaterialTheme.colorScheme.tertiary)
+                        OutlinedTextFieldDefaults.colors(unfocusedBorderColor = MaterialTheme.colorScheme.tertiaryContainer)
                     } else {
                         OutlinedTextFieldDefaults.colors()
                     }
@@ -277,7 +277,7 @@ private fun ChoiceQuestionContent(
                 Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "",
                     modifier = question.answer[index].let {
                         if (it) {
-                            Modifier.border(2.dp, MaterialTheme.colorScheme.tertiary, shape = CircleShape)
+                            Modifier.border(2.dp, MaterialTheme.colorScheme.tertiaryContainer, shape = CircleShape)
                         } else {
                             Modifier
                         }

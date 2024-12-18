@@ -6,7 +6,7 @@ import javax.inject.Inject
 class SignInUseCase @Inject constructor(
     private val authRepository: AuthRepository,
 ) {
-    suspend operator fun invoke(email: String, password: String): Result<Unit, DataError.Network> {
+    suspend operator fun invoke(email: String, password: String): Result<Unit, Error> {
         return authRepository.signIn(email.trim(), password)
     }
 }

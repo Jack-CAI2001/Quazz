@@ -9,7 +9,7 @@ class GetUserUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(): Result<User, DataError.Network>{
+    suspend operator fun invoke(): Result<User, Error>{
         val resultUser =  userRepository.getUser(authRepository.currentUserUid)
 
         return when(resultUser){

@@ -6,7 +6,7 @@ import javax.inject.Inject
 class PasswordUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(newPassword: String, oldPassword: String): Result<Unit, DataError.Network> {
+    suspend operator fun invoke(newPassword: String, oldPassword: String): Result<Unit, Error> {
         return authRepository.updatePassword(newPassword, oldPassword)
     }
 }

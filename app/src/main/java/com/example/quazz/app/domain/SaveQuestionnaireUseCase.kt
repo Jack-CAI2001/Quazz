@@ -1,6 +1,7 @@
 package com.example.quazz.app.domain
 
 import com.example.quazz.app.model.Questionnaire
+import com.example.quazz.app.model.Quizz
 import com.example.quazz.app.repository.QuestionnaireRepository
 import javax.inject.Inject
 
@@ -12,7 +13,8 @@ class SaveQuestionnaireUseCase @Inject constructor(
     suspend operator fun invoke(title: String, description: String, questionnaire: List<Questionnaire>): Result<Unit, DataError.Network> {
         when (val user = userUseCase.invoke()) {
             is Result.Success -> {
-                when (questionnaireRepository.createQuestionnaire(user.data, title, description, questionnaire)) {
+                val quizz = Quizz(user.data, title, description, questionnaire)
+                when (questionnaireRepository.createQuestionnaire(quizz)) {
                     is Result.Success -> {
                         return Result.Success(Unit)
                     }

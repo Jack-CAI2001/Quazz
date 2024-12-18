@@ -1,15 +1,11 @@
 package com.example.quazz.app.source.network.service
 
-import com.example.quazz.app.domain.DataError
+import com.example.quazz.app.domain.Error
 import com.example.quazz.app.domain.Result
-import com.example.quazz.app.model.Questionnaire
-import com.example.quazz.app.model.User
+import com.example.quazz.app.model.Quizz
 
 interface QuestionnaireService {
     suspend fun createQuestionnaire(
-        user: User,
-        title: String,
-        description: String,
-        questionnaire: List<Questionnaire>
-    ): Result<Unit, DataError.Network>
+        quizz: Quizz
+    ): Result<Unit, Error>
 }
