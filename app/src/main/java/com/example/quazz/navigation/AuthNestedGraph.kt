@@ -10,14 +10,16 @@ import com.example.quazz.app.presentation.auth.register.RegisterScreen
 fun NavGraphBuilder.authGraph(
     appState: QuazzAppState,
 ){
-    navigation(startDestination = Route.LoginRoute.route, route = Route.AuthRoute.route){
-        composable(route = Route.LoginRoute.route) {
+    navigation<Route.AuthRoute>(
+        startDestination = Route.LoginRoute
+    ) {
+        composable<Route.LoginRoute> {
             LoginScreen(
                 openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
                 openScreen = { route -> appState.navigate(route) }
             )
         }
-        composable(route = Route.RegisterRoute.route) {
+        composable<Route.RegisterRoute> {
             RegisterScreen(navigation = { appState.popUp() })
         }
     }

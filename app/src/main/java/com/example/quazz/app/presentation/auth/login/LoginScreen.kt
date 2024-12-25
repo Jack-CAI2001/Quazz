@@ -28,13 +28,14 @@ import com.example.quazz.core.components.QuazzSnackbar
 import com.example.quazz.core.components.QuazzTopAppBar
 import com.example.quazz.core.components.outlinedTextField.OutlinedTextFieldEmail
 import com.example.quazz.core.components.outlinedTextField.OutlinedTextFieldPassword
+import com.example.quazz.navigation.Route
 import com.example.quazz.ui.theme.AppTheme
 import com.example.quazz.ui.theme.QuazzTheme
 
 @Composable
 fun LoginScreen(
-    openAndPopUp: (String, String) -> Unit,
-    openScreen: (String) -> Unit,
+    openAndPopUp: (Route, Route) -> Unit,
+    openScreen: (Route) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ){
     val state by viewModel.uiState.collectAsState()
@@ -65,8 +66,8 @@ fun LoginContent(
     modifier: Modifier = Modifier,
     onEvent: (LoginEvent) -> Unit,
     state: LoginState,
-    openAndPopUp: (String, String) -> Unit,
-    openScreen: (String) -> Unit,
+    openAndPopUp: (Route, Route) -> Unit,
+    openScreen: (Route) -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current

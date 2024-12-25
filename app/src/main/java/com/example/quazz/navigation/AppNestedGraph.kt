@@ -23,39 +23,40 @@ import com.example.quazz.app.presentation.search.SearchScreen
 import com.example.quazz.core.components.ScaffoldBottomApp
 
 fun NavGraphBuilder.appGraph(appState: QuazzAppState){
-    navigation(startDestination = Route.HomeRoute.route, route = Route.AppRoute.route){
-        composable(route = Route.HomeRoute.route) {
+    navigation<Route.AppRoute>(startDestination = Route.HomeRoute) {
+        composable<Route.HomeRoute> {
             ScaffoldBottomApp(navController = appState.navController) {
                 HomeScreen(it, appState.navController)
             }
         }
-        composable(route = Route.SearchRoute.route) {
+        composable<Route.SearchRoute> {
             ScaffoldBottomApp(navController = appState.navController) {
                 SearchScreen(it, appState.navController)
             }
         }
-        composable(route = Route.ProfileRoute.route) {
+        composable<Route.ProfileRoute> {
             ScaffoldBottomApp(navController = appState.navController) {
                 ProfileScreen(
                     paddingValues = it,
                     restartApp = { route -> appState.clearAndNavigate(route) })
             }
         }
-        composable(route = Route.CreateListRoute.route,
-            ) {
+        composable<Route.CreateListRoute> {
             ScaffoldBottomApp(navController = appState.navController) {
                 CreateScreen(it, appState.navController)
             }
         }
-        composable(route = Route.CreateRoute.route,
+        composable<Route.CreateRoute>(
             enterTransition = {
                 scaleIn(
                     animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
-                    transformOrigin = TransformOrigin(0.9f, 0.9f))
+                    transformOrigin = TransformOrigin(0.9f, 0.9f)
+                )
             },
             exitTransition = { scaleOut(
                 animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
-                transformOrigin = TransformOrigin(0.9f, 0.9f)) }) {
+                transformOrigin = TransformOrigin(0.9f, 0.9f)
+            ) }) {
             CreateQuizzScreen(
                 popUp = { appState.popUp() }
             )
@@ -63,10 +64,10 @@ fun NavGraphBuilder.appGraph(appState: QuazzAppState){
     }
 }
 
-sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
-    data object Home : BottomNavItem(Route.HomeRoute.route, Icons.Default.Home, "Home")
-    data object Search : BottomNavItem(Route.SearchRoute.route, Icons.Default.Search, "Search")
-    data object Profile : BottomNavItem(Route.ProfileRoute.route, Icons.Default.Person, "Profile")
-    data object Create : BottomNavItem(Route.CreateListRoute.route, Icons.Default.AddCircle, "Create")
+sealed class BottomNavItem(val route: Route, val icon: ImageVector, val label: String) {
+    data object Home : BottomNavItem(Route.HomeRoute, Icons.Default.Home, "Home")
+    data object Search : BottomNavItem(Route.SearchRoute, Icons.Default.Search, "Search")
+    data object Profile : BottomNavItem(Route.ProfileRoute, Icons.Default.Person, "Profile")
+    data object Create : BottomNavItem(Route.CreateListRoute, Icons.Default.AddCircle, "Create")
 
 }

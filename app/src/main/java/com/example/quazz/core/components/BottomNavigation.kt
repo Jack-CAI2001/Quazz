@@ -1,5 +1,6 @@
 package com.example.quazz.core.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,23 +13,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.quazz.navigation.BottomNavItem
 import com.example.quazz.navigation.Route
 import com.example.quazz.ui.theme.AppTheme
 
+@SuppressLint("RestrictedApi")
 @Composable
-fun BottomNavigationBar(navController: NavController, screens:  List<BottomNavItem>, startDestination: String) {
+fun BottomNavigationBar(navController: NavController, screens:  List<BottomNavItem>, startDestination: Route) {
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+        val currentRoute = navBackStackEntry?.destination
         screens.forEach { screen ->
-            AddScreen(screen = screen, selected = currentRoute == screen.route) {
+            val selected = currentRoute?.hierarchy?.any { it.hasRoute(screen.route::class) } == true
+            AddScreen(screen = screen, selected = selected) {
                 navController.navigate(screen.route)
                 {
-                    popUpTo(startDestination)
+                    popUpTo(startDestination) {
+                        saveState = true
+                    }
                     launchSingleTop = true
+                    restoreState = true
                 }
             }
         }
@@ -54,7 +62,7 @@ fun ScaffoldBottomApp(navController: NavController, content: @Composable (Paddin
         BottomNavItem.Create,
         BottomNavItem.Profile,
         )
-    val startDestination = Route.HomeRoute.route
+    val startDestination = Route.HomeRoute
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController, screens, startDestination)

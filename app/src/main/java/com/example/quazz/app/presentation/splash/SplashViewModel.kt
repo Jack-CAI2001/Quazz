@@ -10,8 +10,8 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val userConnectedUseCase: UserConnectedUseCase,
 ): ViewModel() {
-    fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-        if (userConnectedUseCase.invoke()) openAndPopUp(Route.AppRoute.route, Route.SplashRoute.route)
-        else openAndPopUp(Route.LoginRoute.route, Route.SplashRoute.route)
+    fun onAppStart(openAndPopUp: (Route, Route) -> Unit) {
+        if (userConnectedUseCase.invoke()) openAndPopUp(Route.AppRoute, Route.SplashRoute)
+        else openAndPopUp(Route.LoginRoute, Route.SplashRoute)
     }
 }

@@ -53,11 +53,11 @@ import com.example.quazz.ui.theme.QuazzTheme
 @Composable
 fun ProfileScreen(
     paddingValues: PaddingValues,
-    restartApp: ((String) -> Unit),
+    restartApp: ((Route) -> Unit),
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsState()
-    if (state.isUserConnected.not()) { restartApp(Route.SplashRoute.route) }
+    if (state.isUserConnected.not()) { restartApp(Route.SplashRoute) }
     val errorMessage = state.errorMessage.asString()
     if (state.isLoading) {
         LoadingScreen()

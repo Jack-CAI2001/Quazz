@@ -29,8 +29,8 @@ fun SearchScreen(paddingValues: PaddingValues, navController: NavController) {
         Text(text = "Search Screen", fontSize = 40.sp)
         Spacer(modifier = Modifier.height(40.dp))
         Button(onClick = {
-            navController.navigate(Route.AuthRoute.route) {
-                popUpTo(Route.AppRoute.route) {
+            navController.navigate(Route.AuthRoute) {
+                popUpTo(Route.AppRoute) {
                     inclusive = true
                 }
             }

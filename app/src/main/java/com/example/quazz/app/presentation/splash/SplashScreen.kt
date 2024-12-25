@@ -16,13 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quazz.core.components.Background
+import com.example.quazz.navigation.Route
 import kotlinx.coroutines.delay
 
 private const val SPLASH_TIMEOUT = 1000L
 
 @Composable
 fun SplashScreen(
-    openAndPopUp: (String, String) -> Unit,
+    openAndPopUp: (Route, Route) -> Unit,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
     SplashScreenContent {

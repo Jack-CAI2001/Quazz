@@ -15,8 +15,8 @@ import com.example.quazz.app.presentation.splash.SplashScreen
 @Composable
 fun Nav() {
     val appState = rememberAppState()
-    NavHost(navController = appState.navController, startDestination = Route.SplashRoute.route) {
-        composable(Route.SplashRoute.route) {
+    NavHost(navController = appState.navController, startDestination = Route.SplashRoute) {
+        composable<Route.SplashRoute> {
             SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
         }
         authGraph(appState)

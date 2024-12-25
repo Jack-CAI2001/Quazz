@@ -59,7 +59,7 @@ class LoginViewModel @Inject constructor(
 
     // endregion
 
-    private fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
+    private fun onSignInClick(openAndPopUp: (Route, Route) -> Unit) {
         val email = _uiState.value.email
         val password = _uiState.value.password
         validate(email, password).let {
@@ -71,7 +71,7 @@ class LoginViewModel @Inject constructor(
             when(val result = signInUseCase.invoke(email, password)) {
                 is Result.Success -> {
                     updateLoading(false)
-                    openAndPopUp(Route.AppRoute.route, Route.LoginRoute.route)
+                    openAndPopUp(Route.AppRoute, Route.LoginRoute)
                 }
                 is Result.Error -> {
                     updateLoading(false)
@@ -81,12 +81,12 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun onSignUpClick(openScreen: (String) -> Unit) {
+    private fun onSignUpClick(openScreen: (Route) -> Unit) {
         updateEmail("")
         updatePassword("")
         updateSigninError(UiText.DynamicString(""))
         updateFieldsError(UiText.DynamicString(""))
-        openScreen(Route.RegisterRoute.route)
+        openScreen(Route.RegisterRoute)
     }
 
     private fun validate(email: String, password: String): Result<Unit, Error.CommonError> {
