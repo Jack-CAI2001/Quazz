@@ -1,4 +1,4 @@
-package com.example.quazz.app.presentation.create.quizz
+package com.example.quazz.app.presentation.quizzList.createQuizz
 
 import com.example.quazz.app.domain.SaveQuestionnaireUseCase
 import com.example.quazz.app.domain.validator.QuestionnaireValidator
@@ -9,7 +9,7 @@ import io.mockk.spyk
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 
-class CreateQuizzViewModelViewModelTest: ViewModelTest() {
+class QuizzListViewModelTest: ViewModelTest() {
     private val mockkSaveQuestionnaireUseCase = mockk<SaveQuestionnaireUseCase>(relaxed = true)
     private val mockkQuestionnaireValidator = mockk<QuestionnaireValidator>(relaxed = true)
 
@@ -25,12 +25,6 @@ class CreateQuizzViewModelViewModelTest: ViewModelTest() {
             )
         )
     }
-
-    // creation de questionnaire
-    // creation de question les deux types
-    // modification
-    // suppression
-
 
     @AfterEach
     override fun afterEach() {

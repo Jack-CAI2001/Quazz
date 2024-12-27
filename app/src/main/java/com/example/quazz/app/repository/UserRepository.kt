@@ -13,4 +13,8 @@ class UserRepository @Inject constructor(
 
     suspend fun updateUserEmail(email: String) = userService.updateUserEmail(email)
 
+    suspend fun getQuizzCreated(uid: String) = userService.getQuizzCreated(uid)
+
+    suspend fun getQuizzList(uid: String) = userService.getQuizzList(uid)
+
 }

@@ -1,14 +1,20 @@
 package com.example.quazz.ui.theme
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.example.quazz.core.components.ProvideAnimatedVisibilityScope
+import com.example.quazz.core.components.ProvideSharedTransitionScope
 
 object QuazzTheme {
     val dimension: QuazzDimension
@@ -17,6 +23,7 @@ object QuazzTheme {
         get() = LocalQuazzDimension.current
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -42,6 +49,20 @@ fun AppTheme(
         colorScheme = colors,
         typography = typography,
         shapes = shapes,
-        content = content
-    )
+    ) {
+        SharedTransitionLayout {
+            ProvideSharedTransitionScope {
+                if (LocalInspectionMode.current) {
+                    AnimatedVisibility(
+                        visible = true,
+                        label = "LocalAnimatedVisibility"
+                    ) {
+                        ProvideAnimatedVisibilityScope(content)
+                    }
+                } else {
+                    content()
+                }
+            }
+        }
+    }
 }

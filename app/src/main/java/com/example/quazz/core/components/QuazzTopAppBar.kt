@@ -28,7 +28,7 @@ fun QuazzTopAppBar(
     canNavigateBack: Boolean = false,
     isLoading: Boolean = false,
     navigateUp: () -> Unit = {},
-    actions: @Composable() (RowScope.() -> Unit) = {},
+    actions: @Composable (RowScope.() -> Unit) = {},
 ) {
     Column {
         TopAppBar(

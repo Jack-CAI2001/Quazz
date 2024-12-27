@@ -13,7 +13,7 @@ class SaveQuestionnaireUseCase @Inject constructor(
     suspend operator fun invoke(title: String, description: String, questionnaire: List<Questionnaire>): Result<Unit, DataError.Network> {
         when (val user = userUseCase.invoke()) {
             is Result.Success -> {
-                val quizz = Quizz(user.data, title, description, questionnaire)
+                val quizz = Quizz(user = user.data, title = title, description = description, questionnaires = questionnaire)
                 when (questionnaireRepository.createQuestionnaire(quizz)) {
                     is Result.Success -> {
                         return Result.Success(Unit)

@@ -44,7 +44,7 @@
     <string name="log_out_text">Log out</string>
     <string name="save">Save</string>
     <string name="edit_pseudo">Edit Pseudo</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="pseudo">Pseudo</string>
     <string name="placeholder_pseudo">Enter pseudo</string>
     <string name="placeholder_new_password">Enter new password</string>
@@ -85,5 +85,13 @@
     <string name="firestore_error_unavailable">Unavailable</string>
     <string name="firestore_error_dataLoss">DataLoss</string>
     <string name="firestore_error_unauthenticated">The request does not have valid authentication credentials for the operation.</string>
-
+    <string name="created">Created</string>
+    <string name="quizz">Quizz</string>
+    <string name="add_quizz">Add Quizz</string>
+    <string name="run_quizz">Run Quizz</string>
+    <string name="edit_quizz">Edit Quizz</string>
+    <string name="delete_quizz">Delete quizz</string>
+    <string name="see_question">See question</string>
+    <string name="see_answer">See answer</string>
+    <string name="question_number">Question n°</string>
 </resources>

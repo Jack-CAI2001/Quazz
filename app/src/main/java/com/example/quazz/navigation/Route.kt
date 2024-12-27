@@ -24,4 +24,6 @@ sealed class Route {
     data object SplashRoute: Route()
     @Serializable
     data object CreateRoute : Route()
+    @Serializable
+    data class QuizzRoute(val quizzId: String) : Route()
 }

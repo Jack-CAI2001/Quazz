@@ -1,25 +1,22 @@
 package com.example.quazz.navigation
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.quazz.QuazzAppState
-import com.example.quazz.app.presentation.create.CreateScreen
-import com.example.quazz.app.presentation.create.quizz.CreateQuizzScreen
 import com.example.quazz.app.presentation.home.HomeScreen
 import com.example.quazz.app.presentation.profile.ProfileScreen
+import com.example.quazz.app.presentation.quizzList.QuizzListScreen
+import com.example.quazz.app.presentation.quizzList.createQuizz.CreateQuizzScreen
+import com.example.quazz.app.presentation.quizzList.quizz.QuizzScreen
 import com.example.quazz.app.presentation.search.SearchScreen
+import com.example.quazz.core.components.BaselineQuiz24
+import com.example.quazz.core.components.ProvideAnimatedVisibilityScope
 import com.example.quazz.core.components.ScaffoldBottomApp
 
 fun NavGraphBuilder.appGraph(appState: QuazzAppState){
@@ -42,24 +39,21 @@ fun NavGraphBuilder.appGraph(appState: QuazzAppState){
             }
         }
         composable<Route.CreateListRoute> {
-            ScaffoldBottomApp(navController = appState.navController) {
-                CreateScreen(it, appState.navController)
+            ProvideAnimatedVisibilityScope {
+                ScaffoldBottomApp(navController = appState.navController) {
+                    QuizzListScreen(it, appState.navController)
+                }
             }
         }
-        composable<Route.CreateRoute>(
-            enterTransition = {
-                scaleIn(
-                    animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
-                    transformOrigin = TransformOrigin(0.9f, 0.9f)
+        composable<Route.CreateRoute> {
+            ProvideAnimatedVisibilityScope {
+                CreateQuizzScreen(
+                    popUp = { appState.popUp() }
                 )
-            },
-            exitTransition = { scaleOut(
-                animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
-                transformOrigin = TransformOrigin(0.9f, 0.9f)
-            ) }) {
-            CreateQuizzScreen(
-                popUp = { appState.popUp() }
-            )
+            }
+        }
+        composable<Route.QuizzRoute> {
+            QuizzScreen({ appState.popUp() })
         }
     }
 }
@@ -68,6 +62,6 @@ sealed class BottomNavItem(val route: Route, val icon: ImageVector, val label: S
     data object Home : BottomNavItem(Route.HomeRoute, Icons.Default.Home, "Home")
     data object Search : BottomNavItem(Route.SearchRoute, Icons.Default.Search, "Search")
     data object Profile : BottomNavItem(Route.ProfileRoute, Icons.Default.Person, "Profile")
-    data object Create : BottomNavItem(Route.CreateListRoute, Icons.Default.AddCircle, "Create")
+    data object Quizz : BottomNavItem(Route.CreateListRoute, BaselineQuiz24, "Quizz")
 
 }

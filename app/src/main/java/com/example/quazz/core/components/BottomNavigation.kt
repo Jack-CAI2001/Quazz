@@ -59,7 +59,7 @@ fun ScaffoldBottomApp(navController: NavController, content: @Composable (Paddin
     val screens = listOf(
         BottomNavItem.Home,
         BottomNavItem.Search,
-        BottomNavItem.Create,
+        BottomNavItem.Quizz,
         BottomNavItem.Profile,
         )
     val startDestination = Route.HomeRoute
