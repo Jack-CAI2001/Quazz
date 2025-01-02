@@ -25,5 +25,5 @@ sealed class Route {
     @Serializable
     data object CreateRoute : Route()
     @Serializable
-    data class QuizzRoute(val quizzId: String) : Route()
+    data class QuizzRoute(val quizzId: String, val selectedTabIndex: Int) : Route()
 }

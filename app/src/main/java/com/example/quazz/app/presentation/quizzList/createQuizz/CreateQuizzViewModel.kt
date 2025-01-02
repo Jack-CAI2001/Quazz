@@ -1,4 +1,4 @@
-package com.example.quazz.app.presentation.create.quizz
+package com.example.quazz.app.presentation.quizzList.createQuizz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

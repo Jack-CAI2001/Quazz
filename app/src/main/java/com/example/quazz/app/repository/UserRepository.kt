@@ -17,4 +17,6 @@ class UserRepository @Inject constructor(
 
     suspend fun getQuizzList(uid: String) = userService.getQuizzList(uid)
 
+    suspend fun getUserQuizzById(quizzId: String, uid: String) = userService.getUserQuizzById(quizzId, uid)
+
 }

@@ -8,4 +8,6 @@ interface QuestionnaireService {
     suspend fun createQuestionnaire(
         quizz: Quizz
     ): Result<Unit, Error>
+
+    suspend fun getQuizzById(quizzId : String): Result<Quizz, Error>
 }

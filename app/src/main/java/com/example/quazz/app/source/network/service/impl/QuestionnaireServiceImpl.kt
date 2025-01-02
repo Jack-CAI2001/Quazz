@@ -3,6 +3,7 @@ package com.example.quazz.app.source.network.service.impl
 import com.example.quazz.app.domain.Error
 import com.example.quazz.app.domain.Result
 import com.example.quazz.app.domain.handleError
+import com.example.quazz.app.model.Questionnaire
 import com.example.quazz.app.model.Quizz
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.AUTHOR
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.DESCRIPTION
@@ -14,7 +15,9 @@ import com.example.quazz.app.source.network.service.DatabaseConstants.User.QUIZZ
 import com.example.quazz.app.source.network.service.DatabaseConstants.User.USER_COLLECTION
 import com.example.quazz.app.source.network.service.QuestionnaireService
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -59,6 +62,41 @@ class QuestionnaireServiceImpl @Inject constructor(): QuestionnaireService {
                 )) // attribue user au ref quizz
             }.await()
             Result.Success(Unit)
+        } catch (e: Exception) {
+            handleError(e)
+        }
+    }
+
+    override suspend fun getQuizzById(quizzId: String): Result<Quizz, Error> {
+        return try {
+            val quizz = Firebase.firestore
+                .collection(QUIZ_COLLECTION)
+                .document(quizzId)
+
+            val quizzResponse = quizz.get(Source.SERVER).await().toObject<Quizz>()
+
+            val questionsList = mutableListOf<Questionnaire>()
+
+            val questions = quizz
+                .collection(QUESTION_SUBCOLLECTION)
+                .get(Source.SERVER)
+                .await()
+
+            questions.mapNotNull {
+                    question ->
+                if (question.data["options"]!=null) {
+                    questionsList.add(question.toObject(Questionnaire.ChoiceQuestion::class.java))
+                } else {
+                    questionsList.add(question.toObject(Questionnaire.TextEntryQuestion::class.java))
+                }
+
+            }
+
+            if (quizzResponse == null) {
+                throw Exception("Quizz data not found or invalid")
+            }
+
+            Result.Success(quizzResponse.copy(id = quizzId, questionnaires = questionsList))
         } catch (e: Exception) {
             handleError(e)
         }

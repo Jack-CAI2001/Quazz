@@ -1,4 +1,4 @@
-package com.example.quazz.app.presentation.create.quizz
+package com.example.quazz.app.presentation.quizzList.createQuizz
 
 import com.example.quazz.app.model.Questionnaire
 

@@ -10,4 +10,6 @@ class QuestionnaireRepository @Inject constructor(
     suspend fun createQuestionnaire(
         quizz: Quizz
     ) = questionnaireService.createQuestionnaire(quizz)
+
+    suspend fun getQuizzById(quizzId : String) = questionnaireService.getQuizzById(quizzId)
 }
