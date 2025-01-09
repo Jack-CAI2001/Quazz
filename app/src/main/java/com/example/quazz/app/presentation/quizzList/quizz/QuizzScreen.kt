@@ -59,6 +59,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun QuizzScreen(
     popUp: () -> Unit,
+    navigate: ((Quizz) -> Unit),
     viewModel: QuizzViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -117,7 +118,12 @@ fun QuizzScreen(
                             },
                             text = stringResource(R.string.run_quizz)
                         ) {
-                            TODO()
+                            navigate(state.quizz)
+                            coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
                         }
                         TextIconStartPosition(
                             icon = {
@@ -204,9 +210,9 @@ fun QuizzContent(
             Column {
                 state.quizz.questionnaires.forEachIndexed {
                         index, questionnaire ->
-                    when(questionnaire.asString()) {
-                        stringResource(id = R.string.choice_question) -> DisplayChoiceQuestion(questionnaire as Questionnaire.ChoiceQuestion, index)
-                        stringResource(id = R.string.text_question)  -> DisplayTextEntryQuestion(questionnaire as Questionnaire.TextEntryQuestion, index)
+                    when(questionnaire) {
+                        is Questionnaire.ChoiceQuestion -> DisplayChoiceQuestion(questionnaire, index)
+                        is Questionnaire.TextEntryQuestion -> DisplayTextEntryQuestion(questionnaire, index)
                     }
                 }
             }

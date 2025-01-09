@@ -41,7 +41,7 @@
     <string name="edit_email">Edit email</string>
     <string name="icon_arrow_right">Arrow right</string>
     <string name="log_out_text_description">Logging out will end your current session. You\'ll need to log in again to continue using the app</string>
-    <string name="log_out_text">Log out</string>
+    <string name="log_out_text">Logout</string>
     <string name="save">Save</string>
     <string name="edit_pseudo">Edit Pseudo</string>
     <string name="loading">Loading…</string>
@@ -94,4 +94,8 @@
     <string name="see_question">See question</string>
     <string name="see_answer">See answer</string>
     <string name="question_number">Question n°</string>
+    <string name="question_number_wrong">Question number %1$d is wrong</string>
+    <string name="every_answer_correct">Every answer is correct</string>
+    <string name="result">Result</string>
+    <string name="complete">Complete</string>
 </resources>

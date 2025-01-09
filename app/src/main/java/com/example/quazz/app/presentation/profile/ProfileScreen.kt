@@ -97,7 +97,7 @@ fun ProfileContent(
                 painter = painterResource(id = R.drawable.baseline_account_circle_24),
                 modifier = Modifier
                     .fillMaxSize(),
-                contentDescription = "test")
+                contentDescription = "")
         }
 
         EditPseudoDialog(
@@ -204,7 +204,7 @@ fun LogOutDialog(
         }
     }
     TextButton(onClick = { openAlertDialog = true }) {
-        Text(text = "Logout")
+        Text(stringResource(R.string.log_out_text))
     }
 }
 

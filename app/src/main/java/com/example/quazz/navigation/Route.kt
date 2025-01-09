@@ -1,5 +1,6 @@
 package com.example.quazz.navigation
 
+import com.example.quazz.app.model.Quizz
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,4 +27,6 @@ sealed class Route {
     data object CreateRoute : Route()
     @Serializable
     data class QuizzRoute(val quizzId: String, val selectedTabIndex: Int) : Route()
+    @Serializable
+    data class RunQuizzRoute(val quizz: Quizz): Route()
 }
