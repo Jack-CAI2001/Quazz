@@ -1,5 +1,6 @@
 package com.example.quazz.app.repository
 
+import com.example.quazz.app.model.Quizz
 import com.example.quazz.app.model.User
 import com.example.quazz.app.source.network.service.UserService
 import javax.inject.Inject
@@ -18,5 +19,7 @@ class UserRepository @Inject constructor(
     suspend fun getQuizzList(uid: String) = userService.getQuizzList(uid)
 
     suspend fun getUserQuizzById(quizzId: String, uid: String) = userService.getUserQuizzById(quizzId, uid)
+
+    suspend fun addQuizzToQuizzList(quizz: Quizz, uid: String) = userService.addQuizzToQuizzList(quizz, uid)
 
 }

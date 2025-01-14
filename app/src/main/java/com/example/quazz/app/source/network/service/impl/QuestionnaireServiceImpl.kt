@@ -5,6 +5,7 @@ import com.example.quazz.app.domain.Result
 import com.example.quazz.app.domain.handleError
 import com.example.quazz.app.model.Questionnaire
 import com.example.quazz.app.model.Quizz
+import com.example.quazz.app.model.User
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.AUTHOR
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.DESCRIPTION
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.QUESTION_SUBCOLLECTION
@@ -15,11 +16,13 @@ import com.example.quazz.app.source.network.service.DatabaseConstants.User.QUIZZ
 import com.example.quazz.app.source.network.service.DatabaseConstants.User.USER_COLLECTION
 import com.example.quazz.app.source.network.service.QuestionnaireService
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.random.Random
 
 class QuestionnaireServiceImpl @Inject constructor(): QuestionnaireService {
     override suspend fun createQuestionnaire(
@@ -97,6 +100,50 @@ class QuestionnaireServiceImpl @Inject constructor(): QuestionnaireService {
             }
 
             Result.Success(quizzResponse.copy(id = quizzId, questionnaires = questionsList))
+        } catch (e: Exception) {
+            handleError(e)
+        }
+    }
+
+    override suspend fun getRandomQuizz(): Result<Quizz, Error> {
+        return try {
+            val quizz = Firebase.firestore
+                .collection(QUIZ_COLLECTION)
+
+            val documents = quizz.get().await().documents
+            if (documents.isNotEmpty()) {
+                val randomIndex = Random.nextInt(documents.size)
+                val randomDocId = documents[randomIndex].id
+                val randomDoc = documents[randomIndex].toObject<Quizz>()
+                val questionsList = mutableListOf<Questionnaire>()
+                val authorData = documents[randomIndex].data
+
+                if (authorData?.get("author") == null){
+                    throw Exception("Author not found or invalid")
+                }
+
+                val questions = quizz
+                    .document(randomDocId)
+                    .collection(QUESTION_SUBCOLLECTION)
+                    .get(Source.SERVER)
+                    .await()
+
+                questions.mapNotNull {
+                        question ->
+                    if (question.data["options"]!=null) {
+                        questionsList.add(question.toObject(Questionnaire.ChoiceQuestion::class.java))
+                    } else {
+                        questionsList.add(question.toObject(Questionnaire.TextEntryQuestion::class.java))
+                    }
+
+                }
+                if (randomDoc == null) {
+                    throw Exception("Quizz data not found or invalid")
+                }
+                Result.Success(randomDoc.copy(id=randomDocId, questionnaires = questionsList, user = User(uid = (authorData["author"] as DocumentReference).id)))
+            } else {
+                throw Exception("Quizz data not found or invalid")
+            }
         } catch (e: Exception) {
             handleError(e)
         }

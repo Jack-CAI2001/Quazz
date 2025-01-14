@@ -193,8 +193,8 @@ fun QuizzContent(
     var expandable by remember { mutableStateOf(false) }
 
     Column(modifier = modifier
-        .fillMaxSize()
         .verticalScroll(rememberScrollState())
+        .fillMaxSize()
         .padding(
             top = QuazzTheme.dimension.paddingM,
             start = QuazzTheme.dimension.paddingM,

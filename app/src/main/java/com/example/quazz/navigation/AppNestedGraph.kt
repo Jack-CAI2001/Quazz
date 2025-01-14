@@ -29,7 +29,7 @@ fun NavGraphBuilder.appGraph(appState: QuazzAppState){
     navigation<Route.AppRoute>(startDestination = Route.HomeRoute) {
         composable<Route.HomeRoute> {
             ScaffoldBottomApp(navController = appState.navController) {
-                HomeScreen(it, appState.navController)
+                HomeScreen(it, { quizz -> appState.navController.navigate(Route.RunQuizzRoute(quizz))})
             }
         }
         composable<Route.SearchRoute> {

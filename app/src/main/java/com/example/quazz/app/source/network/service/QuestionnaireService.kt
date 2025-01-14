@@ -10,4 +10,6 @@ interface QuestionnaireService {
     ): Result<Unit, Error>
 
     suspend fun getQuizzById(quizzId : String): Result<Quizz, Error>
+
+    suspend fun getRandomQuizz(): Result<Quizz, Error>
 }

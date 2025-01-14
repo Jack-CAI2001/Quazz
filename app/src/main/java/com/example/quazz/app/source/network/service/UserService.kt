@@ -13,4 +13,5 @@ interface UserService {
     suspend fun getQuizzCreated(uid: String): Result<List<Quizz>, Error>
     suspend fun getQuizzList(uid: String): Result<List<Quizz>, Error>
     suspend fun getUserQuizzById(quizzId: String, uid: String): Result<Quizz, Error>
+    suspend fun addQuizzToQuizzList(quizz: Quizz, uid: String): Result<Unit, Error>
 }

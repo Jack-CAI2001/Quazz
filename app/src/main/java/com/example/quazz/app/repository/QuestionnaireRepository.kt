@@ -12,4 +12,6 @@ class QuestionnaireRepository @Inject constructor(
     ) = questionnaireService.createQuestionnaire(quizz)
 
     suspend fun getQuizzById(quizzId : String) = questionnaireService.getQuizzById(quizzId)
+
+    suspend fun getRandomQuizz() = questionnaireService.getRandomQuizz()
 }

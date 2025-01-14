@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -214,7 +215,9 @@ fun CompleteDialog(
             AlertDialog(
                 onDismissRequest = { openAlertDialog = false },
                 confirmButton = {
-
+                    Button(onClick = { openAlertDialog = false }) {
+                        Text(stringResource(R.string.return_))
+                    }
                 },
                 dismissButton = {
                 },

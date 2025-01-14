@@ -6,8 +6,11 @@ import com.example.quazz.app.domain.handleError
 import com.example.quazz.app.model.Questionnaire
 import com.example.quazz.app.model.Quizz
 import com.example.quazz.app.model.User
+import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.AUTHOR
+import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.DESCRIPTION
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.QUESTION_SUBCOLLECTION
 import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.QUIZ_COLLECTION
+import com.example.quazz.app.source.network.service.DatabaseConstants.Quiz.TITLE
 import com.example.quazz.app.source.network.service.DatabaseConstants.User.EMAIL
 import com.example.quazz.app.source.network.service.DatabaseConstants.User.QUIZZ_CREATED_SUBCOLLECTION
 import com.example.quazz.app.source.network.service.DatabaseConstants.User.QUIZZ_LIST_SUBCOLLECTION
@@ -141,6 +144,36 @@ class UserServiceImpl @Inject constructor() : UserService {
             }
 
             Result.Success(quizzResponse.copy(id = quizzId, questionnaires = questionsList))
+        } catch (e: Exception) {
+            handleError(e)
+        }
+    }
+
+    override suspend fun addQuizzToQuizzList(quizz: Quizz, uid: String): Result<Unit, Error> {
+        return try {
+
+            val quizzAuthorRef = Firebase.firestore.collection(USER_COLLECTION).document(quizz.user.uid)
+
+            val userRef = Firebase.firestore.collection(USER_COLLECTION).document(uid)
+            val subCollectionQuizList = userRef.collection(QUIZZ_LIST_SUBCOLLECTION).document()
+            val subCollectionQuestionQuizList = subCollectionQuizList.collection(
+                QUESTION_SUBCOLLECTION
+            )
+
+            Firebase.firestore.runTransaction { transaction ->
+
+                quizz.questionnaires.forEach { questionnaire ->
+                    transaction.set(subCollectionQuestionQuizList.document(), questionnaire)
+                }
+
+                transaction.set(subCollectionQuizList, mapOf(
+                    AUTHOR to quizzAuthorRef,
+                    TITLE to quizz.title,
+                    DESCRIPTION to quizz.description
+                )) // attribue user une copie du quizz dans quizzList
+
+            }
+            Result.Success(Unit)
         } catch (e: Exception) {
             handleError(e)
         }
